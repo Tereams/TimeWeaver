@@ -4,7 +4,9 @@ from tkinter import messagebox
 from app.config import APP_TITLE, WINDOW_SIZE
 from app.models.task import Task
 from app.services.planner import allocate_evenly
+
 from app.ui.task_input_view import TaskInputView
+from app.ui.result_view import ResultView
 
 
 class TaskPlannerApp:
@@ -19,7 +21,7 @@ class TaskPlannerApp:
         title = tk.Label(self.root, text="Task Planner v0.1", font=("Arial", 16))
         title.pack(pady=10)
 
-        # ---- Task input view ----
+        # ---- Task input ----
         self.task_input = TaskInputView(self.root)
         self.task_input.pack(padx=20, pady=10, fill="x")
 
@@ -31,9 +33,9 @@ class TaskPlannerApp:
         )
         self.button.pack(pady=10)
 
-        # ---- Result ----
-        self.result_label = tk.Label(self.root, text="", font=("Arial", 12))
-        self.result_label.pack(pady=5)
+        # ---- Result view ----
+        self.result_view = ResultView(self.root)
+        self.result_view.pack(padx=20, pady=5, fill="x")
 
     def _on_calculate(self):
         try:
@@ -49,12 +51,13 @@ class TaskPlannerApp:
             task = Task(name=name, total_hours=total_hours)
             days = allocate_evenly(task, daily_hours)
 
-            self.result_label.config(
-                text=f"Task '{task.name}' needs {days} days"
+            self.result_view.show_result(
+                f"Task '{task.name}' needs {days} days"
             )
 
         except ValueError as e:
             messagebox.showerror("Input error", str(e))
+            self.result_view.clear()
 
     def run(self):
         self.root.mainloop()

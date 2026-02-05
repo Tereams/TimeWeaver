@@ -65,10 +65,7 @@ class TaskPlannerApp:
             self.task_list.add_task(task)
 
             plan = generate_daily_plan(task, daily_hours)
-	     days = len(plan)
-            self.result_view.show_result(
-    			f"Task '{task.name}' needs {days} days"
-	      )
+            self.result_view.show_plan(plan)
 
             self.task_input.clear()
 
@@ -83,10 +80,8 @@ class TaskPlannerApp:
                     t.total_hours,
                     daily_hours
                 )
-                days = allocate_evenly(t, daily_hours)
-                self.result_view.show_result(
-                    f"Task '{t.name}' needs {days} days"
-                )
+                plan = generate_daily_plan(t, daily_hours)
+                self.result_view.show_plan(plan)
                 break
 
     def run(self):

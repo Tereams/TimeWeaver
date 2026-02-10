@@ -1,4 +1,5 @@
 import tkinter as tk
+import datetime
 
 
 class TaskInputView(tk.Frame):
@@ -21,6 +22,11 @@ class TaskInputView(tk.Frame):
         tk.Label(self, text="Daily hours").pack(anchor="w", pady=(5, 0))
         self.daily_hours_entry = tk.Entry(self)
         self.daily_hours_entry.pack(fill="x")
+        
+        tk.Label(self, text="Start date (YYYY-MM-DD)").pack(anchor="w", pady=(5, 0))
+        self.start_date_entry = tk.Entry(self)
+        self.start_date_entry.pack(fill="x")
+        self.start_date_entry.insert(0, datetime.date.today().isoformat())
 
     def get_input(self):
         """

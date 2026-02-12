@@ -37,9 +37,11 @@ class TaskInputView(tk.Frame):
             "name": self.name_entry.get(),
             "total_hours": self.total_hours_entry.get(),
             "daily_hours": self.daily_hours_entry.get(),
+            "start_date": self.start_date_entry.get(),
         }
 
     def clear(self):
         self.name_entry.delete(0, tk.END)
         self.total_hours_entry.delete(0, tk.END)
         self.daily_hours_entry.delete(0, tk.END)
+        self.start_date_entry.delete(0, tk.END)

@@ -10,6 +10,7 @@ from app.services.planner import generate_daily_plan
 from app.ui.task_input_view import TaskInputView
 from app.ui.result_view import ResultView
 from app.ui.task_list_view import TaskListView
+from app.ui.calendar_view import CalendarView
 
 
 class TaskPlannerApp:
@@ -39,16 +40,20 @@ class TaskPlannerApp:
 
         self.task_input = TaskInputView(right)
         self.task_input.pack(fill="x", pady=5)
+        
+        self.view_mode = "list"
 
-        self.button = tk.Button(
+        self.toggle_button = tk.Button(
             right,
-            text="Add / Update Task",
-            command=self._on_add_task
+            text="Switch to Calendar View",
+            command=self._toggle_view
         )
-        self.button.pack(pady=10)
+        self.toggle_button.pack(pady=5)
 
         self.result_view = ResultView(right)
-        self.result_view.pack(fill="x")
+        self.result_view.pack(fill="both", expand=True)
+
+        self.calendar_view = CalendarView(right)
 
     def _on_add_task(self):
         try:
@@ -69,6 +74,7 @@ class TaskPlannerApp:
             
             plan = generate_daily_plan(task, daily_hours, start_date)
             self.result_view.show_plan(plan)
+            self.calendar_view.show_plan(plan)
 
             self.task_input.clear()
 
@@ -85,7 +91,21 @@ class TaskPlannerApp:
                 )
                 plan = generate_daily_plan(t, daily_hours)
                 self.result_view.show_plan(plan)
+                self.calendar_view.show_plan(plan)
                 break
+  
 
+    def _toggle_view(self):
+        if self.view_mode == "list":
+            self.result_view.pack_forget()
+            self.calendar_view.pack(fill="both", expand=True)
+            self.toggle_button.config(text="Switch to List View")
+            self.view_mode = "calendar"
+        else:
+            self.calendar_view.pack_forget()
+            self.result_view.pack(fill="both", expand=True)
+            self.toggle_button.config(text="Switch to Calendar View")
+            self.view_mode = "list"
+            
     def run(self):
         self.root.mainloop()

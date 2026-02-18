@@ -35,3 +35,23 @@ def test_skip_weekend():
 
     assert plan[0].date.weekday() == 4  # Friday
     assert plan[1].date.weekday() == 0  # Monday
+
+
+def test_variable_daily_hours():
+    task = Task(name="Variable", total_hours=7)
+
+    daily_hours = {
+        0: 2,  # Mon
+        1: 3,  # Tue
+        2: 1,  # Wed
+    }
+
+    start = date(2026, 2, 2)  # Monday
+
+    plan = generate_daily_plan(task, daily_hours, start)
+
+    assert plan[0].hours == 2
+    assert plan[1].hours == 3
+    assert plan[2].hours == 1
+    assert plan[3].hours == 1
+

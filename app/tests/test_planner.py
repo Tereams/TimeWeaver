@@ -1,4 +1,5 @@
 from datetime import date
+import pytest
 from app.models.task import Task
 from app.services.planner import generate_daily_plan
 
@@ -71,3 +72,16 @@ def test_skip_specific_dates():
     assert plan[0].date == date(2026, 2, 2)
     assert plan[1].date == date(2026, 2, 4)
 
+def test_deadline_violation():
+    task = Task(name="Deadline Test", total_hours=10)
+
+    start = date(2026, 2, 2)
+    deadline = date(2026, 2, 4)
+
+    with pytest.raises(ValueError):
+        generate_daily_plan(
+            task,
+            daily_hours=2,
+            start_date=start,
+            deadline=deadline
+        )

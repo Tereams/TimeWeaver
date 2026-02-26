@@ -1,6 +1,8 @@
 import tkinter as tk
 from datetime import date
 from app.models.daily_plan import DailyPlan
+from collections import defaultdict
+from app.models.allocation import AllocationBlock
 
 
 class CalendarView(tk.Frame):
@@ -62,3 +64,35 @@ class CalendarView(tk.Frame):
     def clear(self):
         for cell in self.cells.values():
             cell.config(text="")
+
+    def show_allocations(self, allocations: list[AllocationBlock]):
+        self.clear()
+        if not allocations:
+            return
+
+        grouped = defaultdict(list)
+
+        for a in allocations:
+            grouped[a.date].append(a)
+
+        first_date = min(grouped)
+        monday = first_date
+        while monday.weekday() != 0:
+            monday = monday.replace(day=monday.day - 1)
+
+        for d, items in grouped.items():
+            delta = (d - monday).days
+            row = delta // 7 + 1
+            col = d.weekday()
+
+            total = sum(x.hours for x in items)
+
+            text = f"{d.day}\n{total:.1f}h"
+
+            names = [x.task_name for x in items][:2]
+
+            if names:
+                text += "\n" + ",".join(names)
+
+            if (row, col) in self.cells:
+                self.cells[(row, col)].config(text=text)

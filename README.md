@@ -1,6 +1,6 @@
 # LongDay
 
-LongDay is a local-first planning tool that turns vague goals into realistic days.
+LongDay is a local-first planning tool that turns vagu e goals into realistic days.
 
 Describe what you want to do and how much time you have.
 LongDay breaks it down and fits it into your day.
